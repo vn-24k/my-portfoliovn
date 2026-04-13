@@ -63,7 +63,7 @@ const About = () => {
                 {/* Botão de Download do Currículo PDF */}
                 <div data-aos="zoom-in" data-aos-duration="500" className='mb-20 flex mx-auto items-center justify-center hover:scale-105 duration-300 rounded bg-gradient-to-r from-indigo-600 to-blue-700 lg:w-1/4 md:w-1/3 w-3/4 h-12 text-center cursor-pointer mt-10 gap-2 font-bold'>
                     <AiOutlineCloudDownload size={25} />
-                    <a href="/Curriculo_Vinicius.pdf" download="Curriculo_Vinicius.pdf">BAIXAR CURRÍCULO</a>
+                    <a href="/Curriculo_Vinicius_Silva.pdf" download="Curriculo_Vinicius.pdf">BAIXAR CURRÍCULO</a>
                 </div>
 
                 {/* Rodapé Pessoal - Sem nomes de terceiros */}
