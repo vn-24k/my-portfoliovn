@@ -1,76 +1,105 @@
-import React,{useEffect} from 'react'
-import Gist from '../assets/projects/gist.png'
-import Chatbot from '../assets/projects/chatbot.png'
-import Upscale from '../assets/projects/upscale.png'
-import Ide from '../assets/projects/ide.png'
-import AOS from 'aos'
-import 'aos/dist/aos.css'
+import { useState } from "react";
+import { FiArrowUpRight, FiArrowRight } from "react-icons/fi";
+import { profile, projects } from "../data";
 
-const Projects = () => {
-  useEffect(()=> {
-    AOS.init({duration: 1000})
-})
+const filters = ["Todos", "Inteligência artificial", "Desenvolvimento web"];
 
-  const projectsList = [
-    {
-      id: 1,
-      src: Chatbot,
-      title: "Agente de IA Cognitiva",
-      desc: "Assistente inteligente utilizando GPT-4 e Engenharia de Prompt para automação de tarefas complexas.",
-      demo: "https://www.linkedin.com/in/viniciusilva-dev"
-    },
-    {
-      id: 2,
-      src: Gist,
-      title: "Gist.AI Summarizer",
-      desc: "Ferramenta de IA que processa grandes volumes de texto e gera resumos executivos com precisão.",
-      demo: "https://www.linkedin.com/in/viniciusilva-dev"
-    },
-    {
-      id: 3,
-      src: Upscale,
-      title: "Upscale Vision AI",
-      desc: "Aplicação focada em tratamento de imagem e visão computacional integrada com APIs de Deep Learning.",
-      demo: "https://www.linkedin.com/in/viniciusilva-dev"
-    },
-    {
-      id: 4,
-      src: Ide,
-      title: "Editor de Código Cloud",
-      desc: "Ambiente de desenvolvimento web otimizado para execução de scripts rápidos e testes de algoritmos.",
-      demo: "https://www.linkedin.com/in/viniciusilva-dev"
-    }
-  ]
-
+export default function Projects() {
+  const [filter, setFilter] = useState("Todos");
+  const visible = projects.filter(
+    (project) => filter === "Todos" || project.category === filter,
+  );
   return (
-    <div name="projects" className='h-auto bg-gradient-to-b from-gray-800 to-black w-full text-white py-20'>
-      <div className='max-w-screen-lg p-4 mx-auto flex flex-col justify-center w-full h-full'>
-        <div className='pb-8 mt-16 w-full flex flex-col justify-center items-center mx-auto'>
-          <h3 className='text-4xl pb-2 font-bold inline border-b-4 border-indigo-500 text-center text-white'>Projetos Estratégicos</h3>
+    <section
+      id="projetos"
+      className="section projects-section"
+      tabIndex={-1}
+      aria-labelledby="projects-heading"
+    >
+      <div className="container">
+        <div className="section-heading">
+          <div>
+            <p className="eyebrow">
+              <span>02 /</span> PROJETOS
+            </p>
+            <h2 id="projects-heading">
+              Ideias que viram <em>código.</em>
+            </h2>
+          </div>
+          <p>
+            Inteligência artificial e desenvolvimento web.
+            <br />
+            Uma seleção do que venho construindo.
+          </p>
         </div>
-        <div className='grid sm:grid-cols-2 md:grid-cols-2 gap-8 px-12 sm:px-0'>
-          {
-            projectsList.map(({ id, src, title, desc, demo }) => (
-              <div data-aos="fade-in" data-aos-duration="500" key={id} className='shadow-md shadow-indigo-900/40 rounded-lg overflow-hidden bg-zinc-900/50 flex flex-col justify-between'>
-                <div>
-                  <img src={src} alt={title} className='rounded-t-md duration-200 hover:scale-105 w-full h-48 object-cover' />
-                  <div className='p-4'>
-                    <h4 className='text-xl font-bold mb-2 text-indigo-400'>{title}</h4>
-                    <p className='text-sm text-gray-400 h-20 overflow-hidden leading-relaxed'>{desc}</p>
-                  </div>
+        <div className="filters" role="group" aria-label="Filtrar projetos">
+          {filters.map((item) => (
+            <button
+              key={item}
+              aria-pressed={filter === item}
+              onClick={() => setFilter(item)}
+            >
+              {item}
+              {item === "Todos" && <span>04</span>}
+            </button>
+          ))}
+        </div>
+        <p className="sr-only" role="status">
+          {visible.length}{" "}
+          {visible.length === 1 ? "projeto exibido" : "projetos exibidos"}
+        </p>
+        <div className="project-grid">
+          {visible.map((project) => (
+            <article className="project-card" key={project.id}>
+              <div className={`project-image image-${project.id}`}>
+                <span className="project-number">
+                  {project.number} / PROJETO
+                </span>
+                <img
+                  src={project.image}
+                  alt={`Ilustração do projeto ${project.title}`}
+                  width="800"
+                  height="500"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+              <div className="project-content">
+                <div className="project-title">
+                  <h3>{project.title}</h3>
+                  <FiArrowUpRight aria-hidden="true" />
                 </div>
-                <div className='flex items-center justify-center p-4 border-t border-zinc-800 mt-auto'>
-                  <a target='_blank' rel="noreferrer" href={demo} className='w-full px-6 py-3 duration-200 hover:scale-105 bg-indigo-600 rounded-md text-center font-bold text-base text-white'>
-                    Visualizar Demo
+                <p>{project.description}</p>
+                <ul className="tags" aria-label="Tecnologias e áreas">
+                  {project.tags.map((tag) => (
+                    <li key={tag}>{tag}</li>
+                  ))}
+                </ul>
+                <div className="project-bottom">
+                  <span>Demo pública não disponível</span>
+                  <a
+                    href={profile.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Conversar sobre ${project.title} no LinkedIn (nova aba)`}
+                  >
+                    Conversar sobre <FiArrowRight />
                   </a>
                 </div>
               </div>
-            ))
-          }
+            </article>
+          ))}
         </div>
+        <a
+          className="text-link github-more"
+          href={profile.github}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Explore meu GitHub <FiArrowUpRight />
+          <span className="sr-only"> (nova aba)</span>
+        </a>
       </div>
-    </div>
-  )
+    </section>
+  );
 }
-
-export default Projects
